@@ -1,0 +1,53 @@
+<dom-module id='user-login'>
+	<style include="main-styles">
+		paper-material {
+			max-width: 320px;
+			padding: 4px 16px 16px 16px;
+			margin: 32px auto;
+			background: var(--paper-grey-100);
+		}
+
+		button,
+		paper-button {
+			width: 100%;
+			margin: 0;
+		}
+	</style>
+	<template>
+		<div id="login">
+			<paper-material>
+				<paper-input required auto-validate name="username" value="{{username}}" label="Login"></paper-input>
+				<paper-input required auto-validate name="password" value="{{password}}" label="Password" type="password"></paper-input>
+				<paper-button on-click="signIn">Sign in</paper-button>
+			</paper-material>
+		</div>
+	</template>
+	<script>
+		Polymer({
+			is: 'user-login',
+			signIn: function () {
+				fetch('/auth/login', {
+					credentials: 'include',
+					method: 'post',
+					headers: {
+						"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+					},
+					body: util.queryString({
+						username: this.username,
+						password: this.password
+					})
+				}).then(function (response) {
+					return response.json();
+				}).then(function (data) {
+					if (data.result == 'success') {
+						location.href = '/';
+					} else {
+						util.notify("Your password doesn't match");
+					}
+				}).catch(function (error) {
+					util.notify("An error has occurred");
+				});
+			}
+		});
+	</script>
+</dom-module>

@@ -1,1 +1,1 @@
-# -bdlo-cms-frontend
+# bdlo-cms-admin-frontend

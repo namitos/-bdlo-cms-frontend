@@ -1,0 +1,15 @@
+{
+	"name": "bdlo-cms-admin-frontend",
+	"version": "0.0.1",
+	"private": true,
+	"dependencies": {
+		"bdlo-frontend-common": "namitos/bdlo-frontend-common",
+		"page.js": "visionmedia/page.js",
+		"ckeditor": "ckeditor/ckeditor-dev#4.5.9",
+		"dropler": "namitos/Dropler",
+		"ace": "ajaxorg/ace-builds"
+	},
+	"resolutions": {
+		"firebase": "^3.0"
+	}
+}
