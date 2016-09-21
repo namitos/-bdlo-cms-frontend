@@ -1,0 +1,13 @@
+node_modules
+pids
+static/files
+static/app/vendor
+static/app-build
+.idea
+dump
+dump.tar.gz
+.DS_Store
+log
+*.log
+dump.rdb
+db
