@@ -40,7 +40,7 @@
 					return response.json();
 				}).then(function (data) {
 					if (data.result == 'success') {
-						location.href = '/';
+						location.reload();
 					} else {
 						util.notify("Your password doesn't match");
 					}

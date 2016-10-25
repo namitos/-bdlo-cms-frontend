@@ -110,6 +110,21 @@
 			border-color: #2196f3;
 		}
 
+		button[nostyle] {
+			-webkit-appearance: none;
+			border: 0;
+			padding: 0;
+			background: 0 0;
+			font-size: 100%;
+			vertical-align: middle;
+			height: auto;
+		}
+
+		button[nostyle] paper-button {
+			color: #222;
+			background: #efefef;
+			margin: 0 0 16px 0;
+		}
 	</style>
 
 	<script src="../ckeditor/ckeditor.js"></script>
@@ -155,6 +170,8 @@
 				console.log('WebComponents no polyfill');
 				resolve()
 			}
+		}).then(function () {
+			return util.init();
 		}).then(function () {
 			fc.widgets.code = function (obj, schema) {
 				var el = util.dom.el('div');
@@ -239,64 +256,60 @@
 				}
 			};
 
-			util.init().then(function () {
-				Object.keys(schemas).forEach(function (key) {//creating base classes if they are not exists
+			Object.keys(schemas).forEach(function (key) {//creating base classes if they are not exists
+				try {
 					try {
-						try {
-							eval(key); //dirty hack with evals %)
-						} catch (err) {
-							window[key] = eval(`class ${key} extends Model { static get schema() { return schemas.${key}; } }`);
-						}
-					} catch (e) {
-						err(e);
+						eval(key); //dirty hack with evals %)
+					} catch (err) {
+						window[key] = eval(`class ${key} extends Model { static get schema() { return schemas.${key}; } }`);
 					}
-				});
+				} catch (e) {
+					err(e);
+				}
+			});
 
-				var menu = [{
-					name: `Logout (${user.username})`,
-					url: '/auth/logout'
-				}];
+			var menu = [{
+				name: `Logout (${user.username})`,
+				url: '/auth/logout'
+			}];
 
-				Object.keys(schemas).map(function (key) {
-					menu.push({
-						name: key,
-						url: `#!/collection/${key}`
+			Object.keys(schemas).map(function (key) {
+				menu.push({
+					name: key,
+					url: `#!/collection/${key}`
+				})
+			});
+			document.body.appendChild(user._id ? util.dom.el('main-wrapper', {
+				menu: menu
+			}) : util.dom.el('user-login'));
+
+			page.base(location.pathname.substr(0, location.pathname.length - 1));
+			page('/', function () {
+				mainWrapper.setContent({
+					title: "Admin",
+					el: util.dom.el('h1', {}, "Welcome!")
+				})
+			});
+
+			page('/collection/:modelName', function (data) {
+				var modelName = data.params.modelName;
+				mainWrapper.setContent({
+					title: modelName,
+					el: util.dom.el('documents-edit-table', {
+						model: modelName
 					})
-				});
-				document.body.appendChild(user._id ? util.dom.el('main-wrapper', {
-					menu: menu
-				}) : util.dom.el('user-login'));
+				})
+			});
 
-				page.base(location.pathname.substr(0, location.pathname.length - 1));
-				page('/', function () {
-					mainWrapper.setContent({
-						title: "Admin",
-						el: util.dom.el('h1', {}, "Welcome!")
-					})
-				});
-
-				page('/collection/:modelName', function (data) {
-					var modelName = data.params.modelName;
-					mainWrapper.setContent({
-						title: modelName,
-						el: util.dom.el('documents-edit-table', {
-							model: modelName
-						})
-					})
-				});
-
-				page({
-					hashbang: true
-				});
-				window.addEventListener("hashchange", function () {
-					var url = location.hash.replace(/^#!/, '');
-					page(url);
-					mainWrapper.closeDrawer();
-				}, false);
-
-
-			}).catch(err);
-		});
+			page({
+				hashbang: true
+			});
+			window.addEventListener("hashchange", function () {
+				var url = location.hash.replace(/^#!/, '');
+				page(url);
+				mainWrapper.closeDrawer();
+			}, false);
+		}).catch(err);
 	</script>
 </head>
 <body unresolved>
