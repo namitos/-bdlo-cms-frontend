@@ -292,11 +292,11 @@
 			});
 
 			page('/collection/:modelName', function (data) {
-				var modelName = data.params.modelName;
+				var Model = eval(data.params.modelName);
 				mainWrapper.setContent({
-					title: modelName,
-					el: util.dom.el('documents-edit-table', {
-						model: modelName
+					title: Model.schema.name,
+					el: util.dom.el(Model.schema.tree ? 'documents-edit-tree' : 'documents-edit-table', {
+						model: Model
 					})
 				})
 			});
