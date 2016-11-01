@@ -214,7 +214,7 @@
 					return false;
 				}
 
-				setTimeout(function () {//таймаут нужен, чтоб дождаться аттача в dom. на случай, если вузивуг в paper-dialog
+				setTimeout(function () {
 					var dialog = closest(input, 'paper-dialog');
 					if (dialog) {
 						dialog.setAttribute('no-cancel-on-outside-click', true);
@@ -261,7 +261,11 @@
 					try {
 						eval(key); //dirty hack with evals %)
 					} catch (err) {
-						window[key] = eval(`class ${key} extends Model { static get schema() { return schemas.${key}; } }`);
+						if (schemas[key].tree) {
+							window[key] = eval(`class ${key} extends Tree { static get schema() { return schemas.${key}; } }`);
+						} else {
+							window[key] = eval(`class ${key} extends Model { static get schema() { return schemas.${key}; } }`);
+						}
 					}
 				} catch (e) {
 					err(e);
