@@ -71,7 +71,7 @@
 
     .object-root .form-control {
       display: block;
-      height: 25px;
+      min-height: 25px;
       line-height: 100%;
       width: 100%;
       border-radius: 4px;
@@ -131,29 +131,31 @@
     }
   </style>
 
-  <script src="../ckeditor/ckeditor.js"></script>
-  <script src="../dropler/dropler/plugin.js"></script>
-  <script src="../ace/src-min-noconflict/ace.js"></script>
-
   <script>
-    var documentWrite = '';
+    let documentWrite = [
+      '../ckeditor/ckeditor.js',
+      '../dropler/dropler/plugin.js',
+      '../ace/src-min-noconflict/ace.js'
+    ];
     if (window.Promise) {
     } else {
-      documentWrite += '<script src="../es6-shim/es6-shim.min.js"></' + 'script>';
+      documentWrite.push("../es6-shim/es6-shim.min.js");
     }
     if (window.fetch) {
     } else {
-      documentWrite += '<script src="../fetch/fetch.js"></' + 'script>';
+      documentWrite.push("../fetch/fetch.js");
     }
     if ('registerElement' in document &&
       'import' in document.createElement('link') &&
       'content' in document.createElement('template')) {
       // platform is good!
     } else {
-      documentWrite += '<script src="../webcomponentsjs/webcomponents-lite.min.js"></' + 'script>';
+      documentWrite.push("../webcomponentsjs/webcomponents-lite.min.js");
       window.wcPolyfill = true;
     }
-    document.write(documentWrite);
+    document.write(documentWrite.map(function (item) {
+      return ["<scr", "ipt src='", item, "'></scr", "ipt>"].join('');
+    }).join(''));
   </script>
   <link rel="import" href="elements.html">
   <script>
