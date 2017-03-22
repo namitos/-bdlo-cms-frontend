@@ -308,7 +308,8 @@
         mainWrapper.setContent({
           title: Model.schema.name,
           el: util.dom.el(Model.schema.tree ? 'documents-edit-tree' : 'documents-edit-table', {
-            model: Model
+            model: Model,
+            editMode: true
           })
         })
       });
