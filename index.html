@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
@@ -7,7 +8,7 @@
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="manifest" href="/manifest.json">
   <style>
-    :focus {
+     :focus {
       outline: none;
     }
 
@@ -15,7 +16,8 @@
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       font-family: 'Roboto', 'Noto', sans-serif;
       margin: 0;
       padding: 0;
@@ -29,7 +31,7 @@
       display: inline-block;
     }
 
-    .object-root > label {
+    .object-root>label {
       display: none;
     }
 
@@ -41,8 +43,8 @@
       position: relative;
     }
 
-    .object-root > .object > label,
-    .object-root > .array > label {
+    .object-root>.object>label,
+    .object-root>.array>label {
       font-size: 17px;
       font-weight: 500;
       border-bottom: 1px solid rgba(0, 0, 0, 0.15);
@@ -51,8 +53,8 @@
       display: block;
     }
 
-    .object-root > .object > .object > label,
-    .object-root > .array > .array > label {
+    .object-root>.object>.object>label,
+    .object-root>.array>.array>label {
       padding: 0 0 7px 0;
       font-size: 15px;
     }
@@ -62,8 +64,8 @@
       position: relative;
     }
 
-    .object-root .object > .remove,
-    .object-root .form-group > .remove {
+    .object-root .object>.remove,
+    .object-root .form-group>.remove {
       position: absolute;
       top: 0;
       right: 0;
@@ -137,12 +139,10 @@
       '../dropler/dropler/plugin.js',
       '../ace/src-min-noconflict/ace.js'
     ];
-    if (window.Promise) {
-    } else {
+    if (window.Promise) {} else {
       documentWrite.push("../es6-shim/es6-shim.min.js");
     }
-    if (window.fetch) {
-    } else {
+    if (window.fetch) {} else {
       documentWrite.push("../fetch/fetch.js");
     }
     if ('registerElement' in document &&
@@ -236,20 +236,58 @@
             backend: 'base64',
             settings: {}
           },
-          toolbarGroups: [
-            {name: 'document', groups: ['mode', 'document', 'doctools']},
-            {name: 'clipboard', groups: ['clipboard', 'undo']},
-            {name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing']},
-            {name: 'forms', groups: ['forms']},
-            {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
-            {name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph']},
-            {name: 'links', groups: ['links']},
-            {name: 'insert', groups: ['insert']},
-            {name: 'styles', groups: ['styles']},
-            {name: 'colors', groups: ['colors']},
-            {name: 'tools', groups: ['tools']},
-            {name: 'others', groups: ['others']},
-            {name: 'about', groups: ['about']}
+          toolbarGroups: [{
+              name: 'document',
+              groups: ['mode', 'document', 'doctools']
+            },
+            {
+              name: 'clipboard',
+              groups: ['clipboard', 'undo']
+            },
+            {
+              name: 'editing',
+              groups: ['find', 'selection', 'spellchecker', 'editing']
+            },
+            {
+              name: 'forms',
+              groups: ['forms']
+            },
+            {
+              name: 'basicstyles',
+              groups: ['basicstyles', 'cleanup']
+            },
+            {
+              name: 'paragraph',
+              groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph']
+            },
+            {
+              name: 'links',
+              groups: ['links']
+            },
+            {
+              name: 'insert',
+              groups: ['insert']
+            },
+            {
+              name: 'styles',
+              groups: ['styles']
+            },
+            {
+              name: 'colors',
+              groups: ['colors']
+            },
+            {
+              name: 'tools',
+              groups: ['tools']
+            },
+            {
+              name: 'others',
+              groups: ['others']
+            },
+            {
+              name: 'about',
+              groups: ['about']
+            }
           ],
           removeButtons: 'Print,Preview,NewPage,Save,Templates,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Outdent,Indent,CreateDiv,Blockquote,Language,BidiRtl,BidiLtr,Flash,Smiley,Iframe,About,JustifyBlock'
         });
@@ -264,16 +302,25 @@
         }
       };
 
-      Object.keys(schemas).forEach(function (key) {//creating base classes if they are not exists
+      Object.keys(schemas).forEach(function (key) { //creating base classes if they are not exists
         try {
           try {
             eval(key); //dirty hack with evals %)
           } catch (err) {
             if (schemas[key].tree) {
-              window[key] = eval(`class ${key} extends Tree { static get schema() { return schemas.${key}; } }`);
+              window[key] = class extends Tree {
+                static get schema() {
+                  return schemas[key];
+                }
+              }
             } else {
-              window[key] = eval(`class ${key} extends Model { static get schema() { return schemas.${key}; } }`);
+              window[key] = class extends Model {
+                static get schema() {
+                  return schemas[key];
+                }
+              }
             }
+            console.log(window[key]);
           }
         } catch (e) {
           err(e);
@@ -292,8 +339,8 @@
         })
       });
       document.body.appendChild(user._id ? util.dom.el('main-wrapper', {
-          menu: menu
-        }) : util.dom.el('user-login'));
+        menu: menu
+      }) : util.dom.el('user-login'));
 
       page.base(location.pathname.substr(0, location.pathname.length - 1));
       page('/', function () {
@@ -325,6 +372,8 @@
     }).catch(err);
   </script>
 </head>
+
 <body unresolved>
 </body>
+
 </html>
