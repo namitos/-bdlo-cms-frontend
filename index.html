@@ -194,6 +194,7 @@
         editor.setTheme("ace/theme/monokai");
         lang = schema.lang || 'javascript';
         editor.getSession().setMode("ace/mode/" + lang);
+        this.editor.getSession().setUseWrapMode(true);
         editor.getSession().on('change', function (e) {
           console.log(e);
           input.value = editor.getValue();
